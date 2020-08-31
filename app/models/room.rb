@@ -1,7 +1,20 @@
-class Room < ApplicationRecord
-  has_many :room_users
-  has_many :users, through: :room_users, dependent: :destroy
-  has_many :messages, dependent: :destroy
+require 'rails_helper'
 
-  validates :name, presence: true
+RSpec.describe Room, type: :model do
+  describe '#create' do
+    before do
+      @room = FactoryBot.build(:room)
+    end
+
+    it "nameの値が存在すれば登録できること" do
+      expect(@room).to be_valid
+    end
+
+    it "nameが空では登録できないこと" do
+      @room.name = nil
+      @room.valid?
+      expect(@room.errors.full_messages).to include("Name can't be blank")
+    end
+  end
+
 end
